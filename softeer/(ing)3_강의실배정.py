@@ -14,45 +14,32 @@
 
 https://softeer.ai/practice/info.do?eventIdx=1&psProblemId=392
 
-Q. 두 가지 방법으로 시도. 첫번째가 런타임 에러...
+Q. 런타임 에러... 무얼 더 줄일 수 있을까
 
 """
-
-import heapq
+import sys
+input = sys.stdin.readline
 
 N = int(input())
-heap = []
+array = []
 for _ in range(N):
     a, b = map(int, input().split())
-    heapq.heappush(heap, (a, b))
+    array.append((a, b))
 
-answer = 0
+array.sort(key=lambda x:(x[1], x[0]))
+
 now = 0
-while heap:
-    start, end = heapq.heappop(heap)
-    if now <= start:
-        answer += 1
+count = 0
+for a in array:
+    start, end = a
+    if start >= now:
         now = end
-    
-print(answer)
+        count += 1
+print(count)
 
-
-# import heapq
-
-# N = int(input())
-# lessons = []
-# for _ in range(N):
-#     a, b = map(int, input().split())
-#     lessons.append((a, b))
-
-# lessons = sorted(lessons, key=lambda x: x[0])  # 시작 시간 기준
-
-# q = []
-# for l in lessons:
-#     if q and q[0] <= l[0]:  # 2. 이전의 끝나는 vs 지금의 시작
-#         heapq.heappop(q)
-#     heapq.heappush(q, l[1])  # 1. 끝나는 시간을 넣고
-    
-# print(len(q))
-
-
+"""
+- 종료 시간이 짧은 것 부터 정렬 (종료 시간이 같다면 시작 시간이 짧은 순으로 정렬)
+- 1) 반복문을 돌면서 현재 시간보다 시작 시간이 작다면 pass
+- 2) 아니라면 count + 1해주고 현재 시간 갱신
+- 3) 답은 count
+"""

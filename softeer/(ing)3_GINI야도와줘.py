@@ -14,6 +14,11 @@ bfs
 그러면 각 경우마다 또 돌아야할듯?
 """
 
+
+# 소나기, 각 지점마다 몇초에 소나기가 지났는지
+# 태범, 소나기 고려 bfs
+
+
 R, C = map(int, input().split())
 array = []
 for _ in range(R):
@@ -21,65 +26,65 @@ for _ in range(R):
 
 for i in range(R):
     for j in range(C):
-        if array[i][j] == "H":
-            start_x, start_y = i, j
         if array[i][j] == "W":
+            start_x, start_y = i, j
+        if array[i][j] == "H":
             end_x, end_y = i, j
         if array[i][j] == "*":
             rain_x, rain_y = i, j
 
+from collections import deque
+
 dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
 
-from collections import deque
-queue = deque([(start_x, start_y, rain_x, rain_y)])
-
-flag = False
-answer = 0
-visited = [[False for _ in range(C)] for _ in range(R)]
-visited_r = [[False for _ in range(C)] for _ in range(R)]
-while queue:
-    x, y, rx, ry = queue.popleft()  # me, rain
-    if x == end_x and y == end_y:
-        flag = True
-        break
-
-    for i in range(4):  # 태범
+# 소나기
+rain_queue = deque([(rain_x, rain_y, 0)])
+rain_visited = [[-1 for _ in range(C)] for _ in range(R)]  # 각 지점 별 언제 소나기가 있었는지
+rain_visited[rain_x][rain_y] = 0
+while rain_queue:
+    x, y, rain_time = rain_queue.popleft()
+    for i in range(4):
         nx, ny = x + dx[i], y + dy[i]
         if nx >= R or nx < 0 or ny >= C or ny < 0:
             continue
-        if visited[nx][ny]:
+        if rain_visited[nx][ny] > -1:
             continue
+        if array[nx][ny] in ["H", "W"]:  # 소나기 -> 집: 옮겨지지 않음
+            continue
+        if array[nx][ny] == "X":  # 소나기 -> 강: 소멸
+            break
+        
+        rain_visited[nx][ny] = rain_time + 1
+        rain_queue.append((nx, ny, rain_time + 1))
 
-        rain = []
-        if rx >= 0 and ry >= 0:  # 소나기가 있을때만(소멸될 수 있으므로_)
-            for j in range(4):
-                nrx, nry = rx + dx[j], ry + dy[j]
-                if nrx >= R or nrx < 0 or nry >= C or nry < 0:
-                    continue
-                if visited_r[nrx][nry]:
-                    continue
-                if array[nrx][nry] == "H":  # 소나기는 강과 태범이의 집에 옮겨지지 않는다. 
-                    continue
-                if array[nrx][nry] == "X":  # (소나기는 강으로 가면 소멸)
-                    break
+# for r in rain_visited:
+#     print(r)
 
-                visited_r[nrx][nry] = True
-                array[nrx][nry] = "*"  # 소나기 이동
-                rain.append((nrx, nry))  # 가능한 소나기 조합 append
+# 태범
+def solution():
+    queue = deque([(start_x, start_y, 0)])
+    visited = [[False for _ in range(C)] for _ in range(R)]
+    visited[start_x][start_y] = True
+    while queue:
+        x, y, time = queue.popleft()  # x, y, time
 
-        if array[nx][ny] in [".", "W"]:  # 비어 있거나 세차장이면 움직이고
-            visited[nx][ny] = True
-            answer += 1
+        if x == end_x and y == end_y:
+            return time
 
-            rain = list(set(rain))  # 소나기 중복 제거
-            if len(rain) == 0:
-                queue.append((nx, ny, -1, -1))  # 소나기 소멸
-            else:
-                for r in rain:
-                    queue.append((nx, ny, r[0], r[1]))
+        for i in range(4):
+            nx, ny = x + dx[i], y + dy[i]
+            if nx >= R or nx < 0 or ny >= C or ny < 0:
+                continue
+            if visited[nx][ny]:
+                continue
+            if rain_visited[nx][ny] == time + 1:  # 가야할 시점/장소에 소나기가 있다면!
+                continue
 
-if flag:
-    print(answer)
-else:
-    print("FAIL")
+            if array[nx][ny] in [".", "H"]:  # 갈 수 있는 곳에 대해서만
+                visited[nx][ny] = True
+                queue.append((nx, ny, time + 1))
+
+    return "FAIL"
+
+print(solution())
