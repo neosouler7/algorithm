@@ -11,6 +11,8 @@ W..
 
 https://softeer.ai/practice/info.do?eventIdx=1&psProblemId=583
 
+comment)
+
 bfs
 
 "태범이가 최단경로로 움직이는데, 움직이려는 곳에 그 시간에 소나기가 있으면 피해간다."
@@ -19,6 +21,7 @@ bfs
 2. 소나기가 없다고 가정하고, 태범이 홀로 이동
 3. 2번 && 1번
 
+visited를 단순 bool로 활용할지, 아니면 시간을 저장하는 배열로 활용할지
 """
 
 R, C = map(int, input().split())
@@ -82,7 +85,7 @@ while queue:
             continue
         if array[nx][ny] == "X":  # 강
             continue
-        if rain_visited[nx][ny] > -1 and rain_visited[nx][ny] == new_time:  # 가려는 곳, 시간에 소나기가 있다면! => 소나기가 이미 지나간 곳은 갈 수 없다
+        if rain_visited[nx][ny] > -1 and rain_visited[nx][ny] <= new_time:  # 가려는 곳, 시간에 소나기가 있다면! => 소나기가 이미 지나간 곳은 갈 수 없다
             continue
         if array[nx][ny] in [".", "H"]:  # 비어 있거나 집이면
             visited[nx][ny] = new_time
