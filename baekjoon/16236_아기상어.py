@@ -1,3 +1,9 @@
+"""
+comment)
+dfs, bfs 로직이 메인함수에서 분리되는 경우
+반드시 큰 틀을 먼저 설계할 것.
+"""
+
 N = int(input())
 array = list()
 for _ in range(N):
@@ -22,7 +28,7 @@ import heapq
 
 def bfs(x, y, shark_size):
     visited = [[False for _ in range(N)] for _ in range(N)]
-    heap = []
+    heap = []  # 먹을 수 있는 물고기가 1마리보다 많다면, 거리가 가장 가까운 물고기를 먹으러 간다
     start = (x, y, 0)
     queue = deque([start])
     while queue:
@@ -52,8 +58,7 @@ time = 0
 shark_size = 2
 while True:
     fish_target = bfs(init_x, init_y, shark_size)
-
-    if len(fish_target) == 0:
+    if len(fish_target) == 0:  # 더 이상 먹을 수 있는 물고기가 공간에 없다면 아기 상어는 엄마 상어에게 도움을 요청한다.
         print(time)
         break
     

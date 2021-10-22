@@ -1,29 +1,28 @@
 """
-출처: 백준 > dfs&bfs > 벽 부수고 이동하기
-내용: -
-메모: -
+comment)
+array of bool 형태의 visited가 익숙하긴 하지만,
+경우에 따라서 여러 정보 조합의 set으로 처리해야하는 경우도 있음. 
+
 """
 from collections import deque
 
 def solution(n, m, array):
     # visited = [[[False for _ in range(2)] for _ in range(m)] for _ in range(n)]
-    visited = set([(0, 0, 1)])
+    visited = set([(0, 0, 1)])  # x, y, wall_hit
     start = [[0, 0, 1, 0]]  # x, y, distance, wall_hit
     queue = deque(start)
 
     dx = [-1, 1, 0, 0]
     dy = [0, 0, -1, 1]
     while queue:
-        val = queue.popleft()
-        x, y, distance, wall_hit = val
+        x, y, distance, wall_hit = queue.popleft()
         # visited[x][y][wall_hit] = True
 
         if x == n-1 and y == m-1:
             return distance
 
         for i in range(4):
-            nx = x + dx[i]
-            ny = y + dy[i]
+            nx, ny = x + dx[i], y + dy[i]
             if nx >= n or nx < 0 or ny >= m or ny < 0:
                 continue
 
