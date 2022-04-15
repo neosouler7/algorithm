@@ -12,13 +12,8 @@ n = int(input())
 data = list(map(int, input().split()))
 data = sorted(list(map(int, input().split())), reverse=False)
 
-print(n)
-print(data)
-
 import sys
 speed = sys.stdin.readline().rstrip()
-
-print(speed)
 
 ##### 유용 라이브러리
 itertools, heapq, bisect, collections, math
@@ -26,15 +21,9 @@ itertools, heapq, bisect, collections, math
 ##### sorting
 r = sorted([3,1,4,5,6])
 r_r = sorted([3,1,4,5,6], reverse=True)
-print(r)
-print(r_r)
 
 a = [('a', 1), ('c', 3), ('b', 2)]
 b = sorted(a, key=lambda x:x[1], reverse=True)
-print(b)
-
-##### for
-for i in range(1, len(data)): // enumerate
 
 ##### implementation
 일반적으로 알고리즘 문제에서의 2차원 공간은 행렬을 의미하며
@@ -55,7 +44,7 @@ for i in range(1, len(data)): // enumerate
 
 ##### 탐색
 많은 양의 데이터 중 내가 원하는 데이터를 찾고자 할 때
-# 스택: 프링글스, 삽입/삭제, 입구/출구 동일
+* 스택: 프링글스, 삽입/삭제, 입구/출구 동일
 """
 list + append + pop으로 충분하다 O(1)
 
@@ -70,7 +59,7 @@ print(stack)  # 최하단부터
 print(stack[::-1])  # 최상단부터
 """
 
-# 큐: 은행창구, 대기열
+* 큐: 은행창구, 대기열
 """
 from collections import deque
 
@@ -86,7 +75,7 @@ queue.reverse()  # 역순으로 바꾸기
 print(queue)  # 나중에 들어온 원소부터 출력
 """
 
-# 우선순위 큐
+* 우선순위 큐
 가장 우선순위가 높은 데이터
 (가장 우선순위가 높은 데이터를 먼저 삭제한다)
 1. 리스트
